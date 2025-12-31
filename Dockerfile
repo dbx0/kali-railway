@@ -20,8 +20,15 @@ if [ -n "$USERNAME" ] && [ -n "$PASSWORD" ]; then\n\
     if id "$USERNAME" &>/dev/null; then\n\
         echo "$USERNAME:$PASSWORD" | chpasswd\n\
     else\n\
-        useradd -m -s /bin/bash "$USERNAME" && echo "$USERNAME:$PASSWORD" | chpasswd\n\
+        HOME_DIR="/home/$USERNAME"\n\
+        if [ -d "$HOME_DIR" ]; then\n\
+            useradd -d "$HOME_DIR" -s /bin/bash "$USERNAME" || true\n\
+        else\n\
+            useradd -m -s /bin/bash "$USERNAME"\n\
+        fi\n\
+        echo "$USERNAME:$PASSWORD" | chpasswd\n\
         usermod -aG sudo "$USERNAME"\n\
+        chown -R "$USERNAME:$USERNAME" "$HOME_DIR" 2>/dev/null || true\n\
         echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers\n\
     fi\n\
 fi\n\

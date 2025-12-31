@@ -21,6 +21,17 @@ When deploying to Railway, the USERNAME and PASSWORD enviroment variables will b
 
 To view or edit the USERNAME and PASSWORD enviroment variables, click on the deployed template -> Variables tab
 
+## Persistent Storage (Volume Mount)
+
+To persist user data across container restarts, mount a volume to `/home`. This will preserve:
+- User home directories and all files
+- User configurations (`.bashrc`, `.vimrc`, etc.)
+- Installed tools in user space
+- Any files created in the home directory
+
+In Railway, add a volume mount with:
+- **Mount Path:** `/home`
+
 ## Using locally
 
 ```
@@ -30,6 +41,9 @@ docker build -t kali-railway .
 
 # To run a demo installation on port 22 with the username set to "admin" and password set to "password"
 docker run --rm -e USERNAME=admin -e PASSWORD=password -p 22:22 kali-railway
+
+# To run with persistent storage (mount a volume to /home):
+docker run --rm -e USERNAME=admin -e PASSWORD=password -p 22:22 -v kali-home:/home kali-railway
 
 # Then connect via SSH:
 ssh admin@localhost
