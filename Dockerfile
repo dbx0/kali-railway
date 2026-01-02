@@ -2,7 +2,7 @@ FROM kalilinux/kali-rolling
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get -y install openssh-server sudo && \
+    apt-get -y install openssh-server sudo kali-linux-headless && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
